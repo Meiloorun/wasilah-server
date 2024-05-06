@@ -3,16 +3,8 @@ const mongoose = require("mongoose");
 const messageSchema = new mongoose.Schema(
     {
         message: {
-            type: {
-                type: Number,
-            },
-            body: {
-                type: String,
-                required: true,
-            },
-            registrationId: {
-                type: Number,
-            },
+            type: String,
+            required: true,
         },
         sender: {
             type: mongoose.Schema.Types.ObjectId,
