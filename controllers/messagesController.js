@@ -21,7 +21,7 @@ module.exports.sendGroup = async (req, res, next) => {
     try {
         const {sender, channel, message} = req.body;
         const data = await Message.create({
-            message: { text: message },
+            message: message,
             channel: channel,
             sender: sender,
         });
