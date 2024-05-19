@@ -21,7 +21,7 @@ module.exports.sendGroup = async (req, res, next) => {
     try {
         const {sender, channel, message} = req.body;
         const data = await Message.create({
-            message: { text: message },
+            message: message,
             channel: channel,
             sender: sender,
         });
@@ -56,17 +56,14 @@ module.exports.getDmMessages = async (req, res, next) => {
 
 module.exports.getGroupMessages = async (req, res, next) => {
     try {
-        const { sender, channel } = req.body;
+        const { channel } = req.body;
         const messages = await Message.find({
-            $or: [
-                { sender, channel },
-                // { sender: channel, channel: sender }
-            ]
-        }).sort({ updatedAt: 1 });
+            channel: channel
+        }).populate('sender', 'firstname secondname').sort({ updatedAt: 1 });
 
         const projectedMessages = messages.map((msg) => ({
-            fromSelf: msg.sender.toString() === sender,
-            message: msg.message.text,
+            fromSelf: msg.sender._id.toString() === req.body.sender,
+            message: msg.message,
             sender: msg.sender, 
             channel: msg.channel
         }));
